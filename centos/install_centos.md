@@ -87,3 +87,43 @@
 >> 推荐分区 boot 启动分区 200MB
 
 ![linux示意图](../img/pic01.jpg)
+
+### linux 系统安装
+
+* install or upgrade an existing system : 安装或者升级现有系统
+* install system with basic video driver: 安装过程采用系统的显卡驱动
+* rescue installed system :进入系统修复模式
+* boot from local drive : 退出安装从硬盘启动
+* Memory test :存储介质检测
+
+### 设置linux ip
+
+>我用的是VMware 安装的虚拟机。配置ip的时候遇到不少问题，基本上都是按着教程上面走的，但后面还是联系不上外网。下面是我总结的一些我遇到的问题
+
+* 在关机状态下，打开VM的虚拟网络编辑器，没有eth0 桥接这个选项，默认是3个，而我只有2个，见下图:
+
+![linux安装](../img/pic02.png)
+
+    解决办法：点击上图红框处的更改设置，然后还原默认设置就出来了
+
+* linux配置ip的文件名
+
+
+    vi /etc/sysconfig/network-scripts/ifcfg-eth0
+
+* ip配置各个参数的意思,
+
+
+    * DEVICE=eth0  网卡名
+    * HWADDR=00:0c:29:9d:71:56 网卡mac地址
+    * TYPE=Ethernet 网络连接类型
+    * UUID=1e7af373-9ac0-42d9-9e40-0b7d71bd4c52 唯一标识符
+    * ONBOOT=yes ***自动连接***
+    * NM_CONTROLLED=yes 是否由Network Manager控制该网络接口
+    * BOOTPROTO=none ***ip分配方式 none static dhcp***
+    * IPADDR=192.168.1.241 ip地址
+    * NETMASK=255.255.255.0 掩码
+    * GATEWAY=192.168.1.1 网关
+    * DNS1=192.168.1.1 dns服务器
+    * IPV6INIT=no ipv6
+    * USERCTL=no 用户权限设置，非root账户不能控制
