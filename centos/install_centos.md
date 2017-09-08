@@ -106,6 +106,16 @@
 
     解决办法：点击上图红框处的更改设置，然后还原默认设置就出来了
 
+* 上面衍生出来的问题
+
+
+    在你选中桥接后，我们还要设置下面的VMnet的信息，这里必须设置成自己主机可用的网卡
+![pic04](../img/pic04.jpg)
+
+* 本人用的是window 10,当发现这个的虚拟网络编辑器，出现2个网卡的时候，我先查到的是修改window服务，具体见下方的百度经验
+[没有桥接网卡](http://jingyan.baidu.com/article/af9f5a2d11af4243140a4585.html)
+
+
 * linux配置ip的文件名
 
 
@@ -118,12 +128,19 @@
     * HWADDR=00:0c:29:9d:71:56 网卡mac地址
     * TYPE=Ethernet 网络连接类型
     * UUID=1e7af373-9ac0-42d9-9e40-0b7d71bd4c52 唯一标识符
-    * ONBOOT=yes ***自动连接***
+    * ONBOOT=yes **自动连接**
     * NM_CONTROLLED=yes 是否由Network Manager控制该网络接口
-    * BOOTPROTO=none ***ip分配方式 none static dhcp***
+    * BOOTPROTO=none **ip分配方式 none static dhcp**
     * IPADDR=192.168.1.241 ip地址
     * NETMASK=255.255.255.0 掩码
     * GATEWAY=192.168.1.1 网关
     * DNS1=192.168.1.1 dns服务器
     * IPV6INIT=no ipv6
     * USERCTL=no 用户权限设置，非root账户不能控制
+
+* ip配置好后，还是连不上。说一下我发现的我的问题：开机状态下，点击VM菜单栏的虚拟机>设置
+
+![pic03.jpg](../img/pic03.jpg)
+
+
+    我发现这个钩钩没有打上，尝试勾上之后，我这边就正常了
