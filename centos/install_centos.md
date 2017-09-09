@@ -105,12 +105,12 @@
 ![linux安装](../img/pic02.png)
 
     解决办法：点击上图红框处的更改设置，然后还原默认设置就出来了
-
+***
 * 上面衍生出来的问题
-
 
     在你选中桥接后，我们还要设置下面的VMnet的信息，这里必须设置成自己主机可用的网卡
 ![pic04](../img/pic04.jpg)
+
 
 * 本人用的是window 10,当发现这个的虚拟网络编辑器，出现2个网卡的时候，我先查到的是修改window服务，具体见下方的百度经验
 [没有桥接网卡](http://jingyan.baidu.com/article/af9f5a2d11af4243140a4585.html)
@@ -144,3 +144,10 @@
 
 
     我发现这个钩钩没有打上，尝试勾上之后，我这边就正常了
+
+
+
+* 修改UUID
+1.  vi /etc/sysconfig/network-scripts/ifcfg-eth0 到这个文件先删除MAC地址行
+2. rm -rf /etc/udev/rules.d/70-persistent-net.rules 删除这个文件
+3. reboot or shutdown -r now 重新启动
