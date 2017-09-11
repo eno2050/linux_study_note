@@ -69,7 +69,7 @@
 > -p 递归创建 英文 make directories
 
 ### 链接处理命令
-* ln -s [原文件] [目标文件]
+* ln -s [原文件 绝对路径] [目标文件 绝对路径]
 * 英文翻译:link
 * 功能描述:生成链接文件
 * 选项: -s 创建软连接
@@ -77,8 +77,84 @@
 
 |Id|硬链接|软连接|
 |:-:|:-|:-:|
-|1|拥有相同的i节点和block,可以看做是同一个文件||
-|2|可以通过i节点识别||
-|3|不能跨分区||
-|4|不能针对目录使用|haha|
-|5|相当于一个教室有2个门|haha|
+|1|拥有相同的i节点和block,可以看做是同一个文件|软链接拥有自己的i节点和block块,只是block中放的是元数据的i节点号和文件名，自己不存储数据|
+|2|可以通过i节点识别|删除源文件，软连接不可用|
+|3|不能跨分区|Irwxrwxrwx I代表软连接，软连接的权限都是rwxrwxrwx|
+|4|不能针对目录使用|修改任意文件，另外一个都改变|
+|5|相当于一个教室有2个门|类似window快捷方式|
+
+
+### 文件搜索命令
+* 文件搜索命令 locate **只能搜索文件名**
+1.  locate 文件名 在后台数据库中按文件名搜索，速度非常快
+2. /var/lib/mlocate 搜索的是这个数据库 **默认是一天一更新**
+3.  利用updatedb 立刻更新数据库
+4. 按照/etc/updatedb.conf 这个文件配置搜索，参数如下表
+
+|设置参数|解释|
+|:-|:-|
+|PRUNE_BIND_MOUNTS="yes"|#开启搜索限制|
+|PRUNEFS=|#搜索时,不搜索的文件系统|
+|PRUNENAMES=|#搜索时,不搜索的文件类型|
+|PRUNEPATHS=| 搜索时,不搜索的路径|
+
+* 命令搜索命令 whereis or which
+
+|命令|解释|
+|:-|:-|
+|whereis|搜索系统命令所在的位置，后面可以加参数 -b or -m ,-b 是只显示命令所在位置，-m是只显示帮助文档所在位置|
+|which|搜索命令的位置和别名 **关键是可以看到别名**|
+|whoami|显示当前用户 whoami|
+|whatis|后面加命令，解释命令的作用 whatis ls|
+
+* linux下执行命令只能用绝对路径,当你输入命令的时候，会在环境变量:
+$PATH/usr/lib/qt-3.3/bin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/root/bin 这些目录下面去找
+
+* 文件搜索命令 **find**
+1. find [搜索范围] [搜索条件]
+2. 非常强大，非常慢
+3. example: find / -name install.log
+4. find在系统中搜索符合条件的文件名(完全匹配).若要模糊查询需要使用通配符
+5. 通配符(要用双引号括起来搜索内容及通配符)
+* \* 匹配任意内容
+* ?  匹配任意一个单个字符
+* [] 匹配任意一个中括号内的字符
+
+|参数|解释|例子|
+|:-|:-|:-|
+|-name|文件名搜索|find /root -name "*[db]"|
+|-iname|不区分大小写|find /root -iname "*[db]"|
+|-user|文件所有者|find /root -user root|
+|-nouser|查找没有所有者的文件|find /root -nouser|
+|-size|根据文件大小|find /root -size 25K|
+|-inum|根据文件I节点|find /root -inum 25K|
+
+    注意:没有所有者的文件一般有两种情况，第一种是外来文件，另外一种是系统产生的缓存文件
+
+* 关于参数time的表格 find /var/log/ -mtime +10
+
+|参数|解释|例子|
+|:-|:-|:-|
+|-10|10天内修改的文件|find /var/log/ -mtime +10|
+|10|10天当天修改的文件|find /var/log/ -mtime 10|
+|+10|10天前修改的文件|find /var/log/ -mtime -10|
+|-mtime|修改文件内容|find /var/log/ -mtime +10|
+|-atime|文件的访问时间|find /var/log/ -atime +10|
+|-ctime|修改文件属性|find /var/log/ -ctime +10|
+
+* find的复杂操作
+
+|表达式|解释|
+|:-|:-|
+|find /etc -size +20k -a -size -50K|查找etc目录下面大于20k而且小于50k的文件  -a and 逻辑与  -o or 逻辑或|
+|find /etc -size +20k -a -size -50K -exec ls -lh {}\;|查找/etc目录下大于20kb小于50kb的文件,并显示详细信息;-exec/ok 命令 {} \; 对搜索结果执行操作;注意大括号和斜杠之间有空格|
+
+* 字符串搜索命令 grep
+
+* grep [选项] 字符串 文件名 #在文件当中匹配符合条件的字符串
+> 选项:
+>* -i 忽略大小写
+>* -v 排除制定字符串
+
+
+* find 命令和 grep 命令的区别
