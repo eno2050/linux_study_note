@@ -156,5 +156,18 @@ $PATH/usr/lib/qt-3.3/bin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/us
 >* -i 忽略大小写
 >* -v 排除制定字符串
 
-
 * find 命令和 grep 命令的区别
+
+1. find命令:在系统中搜索符合条件的文件名,若需匹配,使用通配符匹配,通配符是完全匹配
+2. grep命令:在文件中搜索符合条件的字符串,若需匹配,使用正则表达式匹配,正则表达式是包含匹配
+
+### 帮助命令
+#### man 命令
+获取指定命令的帮助
+> man ls
+####查看ls的帮助
+> man -f 命令相当于whatis 命令
+####显示帮助级别,也可以用whereis
+> man -k 命令相当于apropos 命令
+#### 命令 --help
+> ls --help
