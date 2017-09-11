@@ -165,9 +165,164 @@ $PATH/usr/lib/qt-3.3/bin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/us
 #### man 命令
 获取指定命令的帮助
 > man ls
+
 ####查看ls的帮助
 > man -f 命令相当于whatis 命令
+
 ####显示帮助级别,也可以用whereis
 > man -k 命令相当于apropos 命令
+
 #### 命令 --help
 > ls --help
+
+#### info ls
+> info ls 比较详细
+
+### shell的内部命令
+> help Shell内部命令,例如:获取shell内部命令的帮助.如whereis cd(确定是否是shell内部命令),help cd(获取内部命令帮助)
+
+### 压缩和解压缩
+* 常见的压缩格式 .zip .tar .7z .tar.gz .tar.bz2
+
+#### .zip
+* 压缩文件
+> zip 压缩文件名 源文件
+
+* 压缩目录
+> zip -r 压缩文件名 源目录
+
+* 解压文件
+> unzip 压缩文件
+
+#### .gz
+gz格式压缩(Linux专有,但Windows也能解压缩)
+* gzip 源文件
+> 压缩为.gz格式的压缩文件,**源文件会消失**
+* gzip -c 源文件 > 压缩文件
+> 压缩为.gz格式,源文件保留
+* gzip -r 目录
+> 压缩目录下所有的子文件,但是不能压缩目录
+* .gz格式解压缩两种方法
+> 1. gzip -d 压缩目标文件
+> 2. gunzip 压缩文件
+
+#### .bz2
+
+bz2格式压缩(**bzip2命令不能压缩目录**)
+* bzip2 源文件
+> 压缩为.bz2格式,不保留源文件
+* bzip2 -k 源文件
+> 压缩之后保留源文件
+* .bz2格式解压缩
+> 1. bzip2 -d 压缩目标文件文件 #解压缩,-k保留压缩文件
+> 2. bunzip2 压缩文件 #解压缩,-k保留压缩文件
+
+#### .tar 打包命令
+>  tar [选项] 打包文件名 源文件
+
+|选项|含义|
+|:-|:-|
+|-c|打包|
+|-v|显示过程|
+|-f|指定打包后的文件名|
+|-x|解包|
+
+#### .tar.gz
+* .tar.gz压缩格式(先打包为.tar格式,再压缩为.gz格式)
+* 语法:tar -zcvf 压缩包名.tar.gz 源文件
+* -z:  压缩为.tar.gz格式
+* 解压缩: tar -zxvf 压缩包名.tar.gz
+* -x: 解压缩
+* -t: 查看压缩包
+
+#### .tar.bz2
+*  tar -jcvf 压缩包名.tar.bz2 源文件
+*  -j:  压缩为.tar.bz2格式
+*  解压缩:tar -jxvf 压缩包名.tar.bz2
+* -x : 解压缩
+* -t : 查看压缩包
+
+#### 3个特殊用法
+|code|result|
+|:-|:-|
+|tar -zxvf xxx.tar.gz -C /tmp|可以将压缩包，后面跟上大C,解压到指定目录|
+|tar -zcvf /path/xxx.tar.gz 源文件|指定打包位置|
+|tar -zcvf xxx.tar.gz xxx xxx xxx|可以压缩多个目录用空格隔开|
+
+### 关机和重启
+
+#### shutdown 一般用这个
+> shutdown [选项] 时间 例子 shutdown -r now
+
+|选项|解释|
+|:-|:-|
+|-r|重启|
+|-c|取消前一个关机操作|
+|-h|关机(轻易不要使用)|
+
+> shutdown -r 05:30 & 这个表示在凌晨5点30重启,后面的'&'表示这个命令在后台运行，我们还可以继续操作主机，如果不加就会一直卡住
+
+#### 其他关机命令
+* [root@localhost ~]# halt
+* [root@localhost ~]# poweroff
+* [root@localhost ~]# init 0
+#### 其他重启命令
+* [root@localhost ~]# reboot
+* [root@localhost ~]# init 6
+#### 退出登录命令
+* [root@localhost ~]# logout
+
+#### 系统运行级别
+|级别|含义|
+|:-|:-|
+|0|关机|
+|1|单用户(window 安全模式)|
+|2|不完全多用户，不含NFS服务()|
+|3|完全多用户|
+|4|未分配|
+|5|图形界面|
+|6|重启|
+
+#### 关于系统运行级别
+* 运行级别配置文件 /etc/inittab
+* 查询系统运行级别 runlevel
+
+### 其他常用命令
+
+#### 挂载命令
+
+1. 查询与自动挂载
+* [root@localhost ~]# mount
+> 查询系统中已经挂载的设备
+* [root@localhost ~]# mount -a
+> 依据配置文件/etc/fstab的内容,自动挂载
+2. 挂载命令格式
+* [root@localhost ~]# mount [-t 文件系统] [-o 特殊选项] 设备文件名 挂载点
+> 选项:
+      -t 文件系统:加入文件系统类型来制定挂载的类型
+      -o 特殊选项:可以制定挂载的额外选项
+3. 挂载光盘
+* [root@localhost ~]# mkdir/mnt/cdrom/
+> 建立挂载点
+* [root@localhost ~]# mount -t iso9660 /dev/cdrom /mnt/cdrom
+> 挂载光盘
+* [root@localhost ~]# mount /dev/sr0 /mnt/cdrom/
+> cdrom和sr0均可,-t iso9660 可省略
+4.  卸载命令
+* [root@localhost ~]# umount 设备文件名或挂载点
+* [root@localhost ~]# umount /mnt/cdrom
+5.  挂载U盘
+* [root@localhost ~]# fdisk -l
+> 查看U盘设备文件名
+* [root@localhost ~]# mount -t vfat /dev/sdb1 /mnt/usb/
+> 注意:Linux默认不支持NTFS文件系统
+
+#### 用户相关命令
+* [root@localhost ~]# w
+* [root@localhost ~]# who
+
+#### 查询当前登录和过去登录的用户信息
+* [root@localhost ~]# last
+* 文件位置 /var/log/wtmp
+* [root@localhost ~]# lastlog
+* * 文件位置 /var/log/lastlog
